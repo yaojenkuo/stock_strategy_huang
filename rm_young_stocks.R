@@ -5,10 +5,14 @@ rm_young_stocks <- function(non_ky_df) {
   listed_dates <- c()
   
   for (c_url in c_urls) {
-    listed_date <- c_url %>%
-      read_html %>%
-      html_nodes(css = "table:nth-child(1) tr:nth-child(4) td:nth-child(2)") %>%
-      html_text
+    listed_date <- tryCatch({
+      c_url %>%
+        read_html %>%
+        html_nodes(css = "table:nth-child(1) tr:nth-child(4) td:nth-child(2)") %>%
+        html_text
+    }, error = function(e){
+      "999/99/99"
+    })
     listed_dates <- c(listed_dates, listed_date)
     Sys.sleep(round(runif(1, min = 1, max = 3)))
   }
